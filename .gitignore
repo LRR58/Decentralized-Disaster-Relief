@@ -1,0 +1,37 @@
+# Compiler files
+cache/
+out/
+
+# Broadcast logs (ignore all to protect deployment details)
+broadcast/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Package manager
+node_modules/
+
+# Test coverage
+coverage/
+.nyc_output/
