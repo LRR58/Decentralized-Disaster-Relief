@@ -1,66 +1,36 @@
-## Foundry
-
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
-
-Foundry consists of:
-
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+DisasterReliefFund 灾害救济基金合约
+本项目是一个基于以太坊区块链的去中心化灾害救济基金平台，旨在通过智能合约实现透明、可追溯的筹款与捐赠流程，确保救济资金的合理使用和流向可查。
+项目概述
+DisasterReliefFund 合约允许用户创建灾害筹款项目，其他用户可向指定项目捐赠以太币。当项目筹款金额达到目标时，资金将自动转移至项目发起人账户，同时记录所有捐赠行为和项目状态，保障整个流程的公开透明。
+核心功能特性
+•创建筹款项目：用户可发起灾害筹款，需填写筹款原因和目标金额，合约会自动生成唯一项目ID并记录项目信息。
+•捐赠资金：支持者可通过项目ID向指定项目捐赠以太币，捐赠金额实时累计，且每笔捐赠都会触发事件记录。
+•筹款完成自动转账：当项目已筹款金额达到或超过目标金额时，合约自动标记项目为“已完成”，并将全部筹款转移至发起人账户。
+•项目信息查询：支持查询所有筹款项目数量、单个项目详情（发起人地址、筹款原因、目标金额、已筹金额、状态）。
+•捐赠人信息查询：可查询指定项目的所有捐赠人地址及对应捐赠金额，实现资金流向可追溯。
+合约结构
+1. 结构体定义
+•Needer：存储筹款项目信息，包含发起人地址、筹款原因、目标金额、已筹金额、项目状态。
+•Funder：存储捐赠人信息，包含捐赠人地址和捐赠金额。
+2. 状态变量
+•needers[]：数组，存储所有筹款项目的详细信息。
+•funders：映射，键为项目ID，值为该项目的捐赠人数组，关联项目与捐赠记录。
+3. 核心事件
+•FundraiserCreated：创建筹款项目时触发，记录项目ID、发起人地址、筹款原因、目标金额。
+•DonationMade：发生捐赠行为时触发，记录项目ID、捐赠人地址、捐赠金额。
+•FundraiserCompleted：筹款项目完成时触发，记录项目ID、发起人地址、最终筹款金额。
+部署与使用方法
+1. 合约部署
+支持在以太坊兼容链（如Goerli测试网、Mainnet）部署，需使用Solidity ^0.8.0版本编译器。可通过Remix、Truffle、Hardhat等工具部署。
+2. 主要函数调用
+函数名	参数	功能描述	调用者
+createFundraiser	_cause（筹款原因）、_targetAmount（目标金额）	创建新的筹款项目	筹款发起人
+donate	_id（项目ID）	向指定项目捐赠以太币（需附带msg.value）	捐赠人
+getFundraiserCount	无	获取当前筹款项目总数	任意用户
+getFundraiserDetails	_id（项目ID）	获取指定项目的详细信息	任意用户
+getFunders	_id（项目ID）	获取指定项目的所有捐赠人列表	任意用户
+注意事项
+•合约使用 Solidity ^0.8.0 版本，部署时需确保编译器版本兼容，避免因版本差异导致部署失败。
+•捐赠金额需大于0，且仅支持以太币捐赠，捐赠前请确认项目ID正确。
+•筹款项目完成后（已筹金额≥目标金额），将无法再向该项目捐赠。
+•合约严格遵循“检查-效果-交互”模式，避免重入攻击风险，但仍建议在主网部署前进行全面的安全审计。
